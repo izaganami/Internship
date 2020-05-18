@@ -1,6 +1,9 @@
 #do not launch on the second file until finished !
 python main.py --dataset C:/Users/youne/Desktop/Form-Type-Classifier/data --model output/activity.model --label-bin output/lb.pickle --epochs 50
 
+#to train with reloaded model
+python Reload_Train.py --ReloadModel best_model.pickle --dataset C:/Users/youne/Desktop/Form-Type-Classifier/data --model output/activity.model --label-bin output/lb_retrained.pickle --epochs 50
+
 
 ##to launch
 python predict.py --model output/activity.model --label-bin output/lb.pickle --input C:/Users/youne/Desktop/example_clips/p207lise.mp4 --output output/results.avi --size 128
