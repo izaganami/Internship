@@ -1,5 +1,7 @@
 import matplotlib
 matplotlib.use("Agg")
+from tensorflow.python.client import device_lib
+print(device_lib.list_local_devices())
 from keras.preprocessing.image import ImageDataGenerator
 from keras.layers.pooling import AveragePooling2D
 from keras.applications import ResNet50
@@ -9,6 +11,7 @@ from keras.layers.core import Dense
 from keras.layers import Input
 from keras.models import Model
 from keras.optimizers import SGD
+from keras.callbacks import ModelCheckpoint
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
@@ -22,7 +25,8 @@ import os
 from sklearn.metrics import f1_score
 
 
-
+checkpoint = ModelCheckpoint("best_model.pickle", monitor='loss', verbose=1,
+    save_best_only=True, mode='auto', period=1)
 
 ##variable for command line
 ap = argparse.ArgumentParser()
@@ -80,7 +84,7 @@ opt = SGD(lr=1e-4, momentum=0.9, decay=1e-4 / args["epochs"])
 model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
 
 print("[INFO] training head...")
-H = model.fit_generator(trainAug.flow(trainX, trainY, batch_size=50),steps_per_epoch=len(trainX) // 32,validation_data=valAug.flow(testX, testY),validation_steps=len(testX) // 32, epochs=args["epochs"])
+H = model.fit_generator(trainAug.flow(trainX, trainY, batch_size=50),steps_per_epoch=len(trainX) // 32,validation_data=valAug.flow(testX, testY),validation_steps=len(testX) // 32, epochs=args["epochs"],callbacks=[checkpoint])
 print("[INFO] evaluating network...")
 predictions = model.predict(testX, batch_size=32)
 
