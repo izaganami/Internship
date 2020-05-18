@@ -1,1 +1,1 @@
-# Intenship
+# Internship
