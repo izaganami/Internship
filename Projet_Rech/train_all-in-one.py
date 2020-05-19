@@ -34,5 +34,5 @@ cmd = "python3 data_preparation/utils/tri_training_data.py -s "+args['output']+"
 os.system(cmd)
 
 print("[INFO] Phase 4 : Training")
-cmd = "python3 CNN_model_fine_tuning/main.py --dataset "+args['output']+"/output/frames_triees --model "+args['output']+"/output/fig_recognition.model --label-bin "+args['output']+"/output/fig_recognition.pickle --epochs "+str(args['epoch'])
+cmd = "python3 fine-tunning-deeplearning-master/main.py --dataset "+args['output']+"/output/frames_triees --model "+args['output']+"/output/fig_recognition.model --label-bin "+args['output']+"/output/fig_recognition.pickle --epochs "+str(args['epoch'])
 os.system(cmd)
