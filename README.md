@@ -14,7 +14,8 @@
 1. Le script tout en un est redirigé vers le fichier finetuning 
 2. Le fichier predict.py permet maintenant de visualiser le pourcentage des deux premieres configurations
 3. Cette visualisation est sous forme de boutton qui permet de corriger les erreurs de l'algo a chaque click pour semi-automatisation de la tache
-         ![capture du resultat](https://github.com/izaganami/Internship/blob/master/1905.PNG "Capture")
+         
+![capture du resultat](https://github.com/izaganami/Internship/blob/master/1905.PNG "Capture")
          
  Prochaine etape:
       Sauvegarde des r2sultat sous format json au fur de la visualisation et la validation.
