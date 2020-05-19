@@ -18,4 +18,4 @@
 ![capture du resultat](https://github.com/izaganami/Internship/blob/master/1905.PNG "Capture")
          
  Prochaine etape:
-      Sauvegarde des r2sultat sous format json au fur de la visualisation et la validation.
+      Sauvegarde des résultat sous format json au fur de la visualisation et la validation.
