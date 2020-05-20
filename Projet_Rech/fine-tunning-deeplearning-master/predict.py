@@ -33,6 +33,8 @@ def update1(conf,button1):
     confR=conf
     print(confR)
 
+
+
 # Graphics window
 imageFrame = tk.Frame(window, width=900, height=900)
 imageFrame.grid(row=0, column=0, padx=10, pady=2)
@@ -44,6 +46,20 @@ button.pack(side=tk.LEFT)
 button_text1 = tk.StringVar()
 button1 = tk.Button(window, text=tk.StringVar(), width=25, command=lambda: update1(confR,button1))
 button1.pack(side=tk.RIGHT)
+
+v = tk.StringVar(window)
+e = tk.Entry(window, textvariable=v,width=25)
+e.pack()
+
+def update2(conf):
+    print("Entry point clicked")
+    conf = v.get().upper()
+    global confR
+    confR=conf
+    print(confR)
+
+button2 = tk.Button(window,text='Submit',width=25, command=lambda: update2(confR))
+button2.pack()
 
 
 
