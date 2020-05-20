@@ -7,6 +7,7 @@ import argparse
 import pickle
 import cv2
 import matplotlib.pyplot as plt
+import json
 
 confR="F01"
 # Set up GUI
@@ -85,13 +86,60 @@ mean = np.array([123.68, 116.779, 103.939][::1], dtype="float32")
 Q = deque(maxlen=args["size"])
 
 vs = cv2.VideoCapture(args["input"])
+fps=vs.get(cv2.CAP_PROP_FPS)
+count=0
+
+def convert_frame_to_time(count,fps):
+    time=count/fps
+    if time/60 < 1:
+        return "00:00:{:.2f}".format(time)
+    elif time/60 >= 1 and time/60 < 60:
+        minutes=int(time//60)
+        secondes=time/60-(time//60)
+        return "00:{}:{:.2f}".format(minutes,secondes)
+    else:
+        heures=int(time//3600)
+        minutes=int((time/3600-time//3600)*60)
+        secondes=((time/3600-time//3600)*60-minutes)*60
+        return "{}:{}:{:.2f}".format(heures,minutes,secondes)
+
 
 prev_config=""
+
+jsondict={-1: {"start": "null", "end": "null", "label": "null"},-2: {"start": "null0", "end": "null0", "label": "null0"}}
+startjson=""
+endjson=""
+configjson=""
+framejson=0
+togglestart=True
+toggleend=False
+def toggle_start(start0,config0,frame0):
+    global start,configjson,framejson,togglestart,toggleend,startjson
+    startjson= start0
+    configjson=config0
+    framejson=frame0
+    togglestart=False
+    toggleend=True
+
+def toggle_end(end0):
+    global endjson,json,togglestart,toggleend
+    endjson= end0
+    jsondict[framejson] = {
+        "start": startjson, "end": endjson, "label": configjson
+    }
+    toggleend=False
+    togglestart=True
+
+
+
 def show_frame():
+
     writer = None
     (W, H) = (None, None)
     _, frame = vs.read()
-    frame0 = frame
+    global count
+    count += 1
+    print("time stamp current frame: {}".format(convert_frame_to_time(count,fps)) )
     if W is None or H is None:
         (H, W) = frame.shape[:2]
     output = frame.copy()
@@ -133,11 +181,24 @@ def show_frame():
             print("cas5")
             confR=label
             prev_config = confR
-
-
-
-
-
+    global toggleend
+    global togglestart
+    global final_elem, before_final_elem
+    [final_elem,before_final_elem]=sorted(jsondict.keys(),reverse=True)[0:2]
+    final_elem = jsondict[final_elem]['label']
+    before_final_elem = jsondict[before_final_elem]['label']
+    print(final_elem + " " + before_final_elem)
+    print(final_elem+" "+before_final_elem)
+    if bool(jsondict)==True and final_elem!=confR and final_elem!=before_final_elem:
+        print(togglestart)
+        print(toggleend)
+        if togglestart == True and toggleend==False:
+            togglestart=False
+            toggle_start(convert_frame_to_time(count, fps), confR, count)
+            print(jsondict)
+        elif toggleend == True and togglestart==False:
+            toggle_end(convert_frame_to_time(count, fps))
+            toggleend=False
 
     button_text.set("{}".format(label))
     button_text1.set("{}".format(label_j))
@@ -169,8 +230,13 @@ def show_frame():
 
 
 
+
 show_frame()  # Display 2
 window.mainloop()  # Starts GUI
+del jsondict[-1]
+del jsondict[-2]
+with open('result.json', 'w', encoding='utf-8') as outfile:
+    json.dump(jsondict, outfile, ensure_ascii=True)
 
 print("[INFO] cleaning up...")
 j = 0

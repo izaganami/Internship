@@ -19,3 +19,14 @@
          
  Prochaine etape:
       Sauvegarde des résultats sous format json au fur de la visualisation et la validation.
+
+---v03:
+1. L'entrée text est possible avec un champ dédié et un button 
+2. Pour chaque changement de configuration une fonction est lancée permettant de mettre à jour le fichier json
+3. Le fichier json est généré à la fin du code sous la forme:
+
+```json
+"183": {"start": "00:00:16.76", "end": "00:00:16.85", "label": "AS02"}
+```
+
+
