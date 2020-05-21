@@ -15,7 +15,8 @@ window = tk.Tk()  # Makes main window
 window.wm_title("Digital Microscope")
 window.config(background="#FFFFFF")
 window.resizable(0,0)
-
+LABELS = ["F01", "F02", "F03", "F04", "F05", "F06", "F07", "F08", "F09", "F10", "F11", "F12", "F13", "F14", "F15",
+          "F16", "F17", "F18", "AS00", "AS01", "AS02", "AS03"]
 
 
 
@@ -55,9 +56,12 @@ e.pack()
 def update2(conf):
     print("Entry point clicked")
     conf = v.get().upper()
-    global confR
-    confR=conf
-    print(confR)
+    if conf in LABELS:
+        global confR
+        confR=conf
+        print(confR)
+    else :
+        v.set("Enter a valid configuration")
 
 button2 = tk.Button(window,text='Submit',width=25, command=lambda: update2(confR))
 button2.pack()
@@ -75,8 +79,7 @@ ap.add_argument("-o", "--output", required=True, help="path to our output video"
 ap.add_argument("-s", "--size", type=int, default=128, help="size of queue for averaging")
 args = vars(ap.parse_args())
 
-LABELS = ["F01", "F02", "F03", "F04", "F05", "F06", "F07", "F08", "F09", "F10", "F11", "F12", "F13", "F14", "F15",
-          "F16", "F17", "F18", "AS00", "AS01", "AS02", "AS03"]
+
 A = [[0] for i in range(len(LABELS))]
 print(A);
 print("[INFO] loading model and label binarizer...")
