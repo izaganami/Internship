@@ -140,95 +140,97 @@ def show_frame():
     writer = None
     (W, H) = (None, None)
     _, frame = vs.read()
-    global count
-    count += 1
-    print("time stamp current frame: {}".format(convert_frame_to_time(count,fps)) )
-    if W is None or H is None:
-        (H, W) = frame.shape[:2]
-    output = frame.copy()
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    frame = cv2.resize(frame, (224, 224)).astype("float32")
-    frame -= mean
-    preds = model.predict(np.expand_dims(frame, axis=0))[0]
-    Q.append(preds)
+    if  _ :
+        global count
+        count += 1
+        print("time stamp current frame: {}".format(convert_frame_to_time(count, fps)))
+        if W is None or H is None:
+            (H, W) = frame.shape[:2]
+        output = frame.copy()
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame = cv2.resize(frame, (224, 224)).astype("float32")
+        frame -= mean
+        preds = model.predict(np.expand_dims(frame, axis=0))[0]
+        Q.append(preds)
 
-    ##show predictions
-    for i in range(len(preds)):
-        A[i].append(preds[i])
+        ##show predictions
+        for i in range(len(preds)):
+            A[i].append(preds[i])
 
-    results = np.array(Q).mean(axis=0)
-    i = np.argmax(results)
-    results_j = np.delete(results, i)
-    j = np.argmax(results_j)
-    label_j = lb.classes_[j]
-    label = lb.classes_[i]
-    global confR
-    global prev_config
-    if prev_config=="":
-        print("cas1")
-        confR=label
-        prev_config=confR
-
-    if label==prev_config:
-        if label==confR:
-            print("cas2")
-            prev_config=confR
-        else:
-            print("cas3")
-            prev_config = label
-    if label != prev_config:
-        if label==confR:
-            print("cas4")
-            prev_config=confR
-        else:
-            print("cas5")
-            confR=label
+        results = np.array(Q).mean(axis=0)
+        i = np.argmax(results)
+        results_j = np.delete(results, i)
+        j = np.argmax(results_j)
+        label_j = lb.classes_[j]
+        label = lb.classes_[i]
+        global confR
+        global prev_config
+        if prev_config == "":
+            print("cas1")
+            confR = label
             prev_config = confR
-    global toggleend
-    global togglestart
-    global final_elem, before_final_elem
-    [final_elem,before_final_elem]=sorted(jsondict.keys(),reverse=True)[0:2]
-    final_elem = jsondict[final_elem]['label']
-    before_final_elem = jsondict[before_final_elem]['label']
-    print(final_elem + " " + before_final_elem)
-    print(final_elem+" "+before_final_elem)
-    if bool(jsondict)==True and final_elem!=confR and final_elem!=before_final_elem:
-        print(togglestart)
-        print(toggleend)
-        if togglestart == True and toggleend==False:
-            togglestart=False
-            toggle_start(convert_frame_to_time(count, fps), confR, count)
-            print(jsondict)
-        elif toggleend == True and togglestart==False:
-            toggle_end(convert_frame_to_time(count, fps))
-            toggleend=False
 
-    button_text.set("{}".format(label))
-    button_text1.set("{}".format(label_j))
+        if label == prev_config:
+            if label == confR:
+                print("cas2")
+                prev_config = confR
+            else:
+                print("cas3")
+                prev_config = label
+        if label != prev_config:
+            if label == confR:
+                print("cas4")
+                prev_config = confR
+            else:
+                print("cas5")
+                confR = label
+                prev_config = confR
+        global toggleend
+        global togglestart
+        global final_elem, before_final_elem
+        [final_elem, before_final_elem] = sorted(jsondict.keys(), reverse=True)[0:2]
+        final_elem = jsondict[final_elem]['label']
+        before_final_elem = jsondict[before_final_elem]['label']
+        print(final_elem + " " + before_final_elem)
+        print(final_elem + " " + before_final_elem)
+        if bool(jsondict) == True and final_elem != confR and final_elem != before_final_elem:
+            print(togglestart)
+            print(toggleend)
+            if togglestart == True and toggleend == False:
+                togglestart = False
+                toggle_start(convert_frame_to_time(count, fps), confR, count)
+                print(jsondict)
+            elif toggleend == True and togglestart == False:
+                toggle_end(convert_frame_to_time(count, fps))
+                toggleend = False
 
-    text = "Config: {}".format(label)
-    text_j = "Config: {}".format(label_j)
-    button.config(text="{:.2f}% {}".format(round(results[i],2)*100,label))
-    button1.config(text="{:.2f}% {}".format(round(results_j[j],2)*100,label_j))
-    text_r ="Config: {}".format( confR)
+        button_text.set("{}".format(label))
+        button_text1.set("{}".format(label_j))
+
+        text = "Config: {}".format(label)
+        text_j = "Config: {}".format(label_j)
+        button.config(text="{:.2f}% {}".format(round(results[i], 2) * 100, label))
+        button1.config(text="{:.2f}% {}".format(round(results_j[j], 2) * 100, label_j))
+        text_r = "Config: {}".format(confR)
+
+        print("text_i:{}".format(text))
+        print("text_j:{}".format(text_j))
+        cv2.putText(output, text_r, (35, 50), cv2.FONT_HERSHEY_SIMPLEX,
+                    1.25, (0, 255, 0), 5)
+        if writer is None:
+            fourcc = cv2.VideoWriter_fourcc(*"MJPG")
+            writer = cv2.VideoWriter(args["output"], fourcc, 30, (W, H), True)
+        writer.write(output)
+        print("Here")
+
+        cv2image = cv2.cvtColor(output, cv2.COLOR_BGR2RGBA)
+        img = Image.fromarray(cv2image)
+        imgtk = ImageTk.PhotoImage(image=img)
+        lmain.imgtk = imgtk
+        lmain.configure(image=imgtk)
+        lmain.after(10, show_frame)
 
 
-    print("text_i:{}".format(text))
-    print("text_j:{}".format(text_j))
-    cv2.putText(output, text_r, (35, 50), cv2.FONT_HERSHEY_SIMPLEX,
-                1.25, (0, 255, 0), 5)
-    if writer is None:
-        fourcc = cv2.VideoWriter_fourcc(*"MJPG")
-        writer = cv2.VideoWriter(args["output"], fourcc, 30, (W, H), True)
-    writer.write(output)
-    print("Here")
-
-    cv2image = cv2.cvtColor(output, cv2.COLOR_BGR2RGBA)
-    img = Image.fromarray(cv2image)
-    imgtk = ImageTk.PhotoImage(image=img)
-    lmain.imgtk = imgtk
-    lmain.configure(image=imgtk)
-    lmain.after(10, show_frame)
 
 
 
