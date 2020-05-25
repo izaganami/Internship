@@ -247,6 +247,12 @@ show_frame()  # Display 2
 window.mainloop()  # Starts GUI
 del jsondict[-1]
 del jsondict[-2]
+elem=[]
+for elt,value in jsondict.items():
+    if float(value['prob'][0:-1]) < 10:
+        elem.append(elt)
+for e in elem:
+    del jsondict[e]
 with open('result.json', 'w', encoding='utf-8') as outfile:
     json.dump(jsondict, outfile, ensure_ascii=True)
 
