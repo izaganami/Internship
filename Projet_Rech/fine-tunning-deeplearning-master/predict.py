@@ -9,32 +9,33 @@ import cv2
 import matplotlib.pyplot as plt
 import json
 
-confR="F01"
+confR = "F01"
+prob = "0%"
 # Set up GUI
 window = tk.Tk()  # Makes main window
 window.wm_title("Digital Microscope")
 window.config(background="#FFFFFF")
-window.resizable(0,0)
+window.resizable(0, 0)
 LABELS = ["F01", "F02", "F03", "F04", "F05", "F06", "F07", "F08", "F09", "F10", "F11", "F12", "F13", "F14", "F15",
           "F16", "F17", "F18", "AS00", "AS01", "AS02", "AS03"]
 
+pressed = False
 
 
-
-def update(conf,button):
+def update(conf, button):
     print("butt 1 clicked")
-    conf=button['text'][-4:]
+    conf = button['text'][-4:]
     global confR
-    confR=conf
+    confR = conf
     print(confR)
 
-def update1(conf,button1):
+
+def update1(conf, button1):
     print("butt 2 clicked")
     conf = button1['text'][-4:]
     global confR
-    confR=conf
+    confR = conf
     print(confR)
-
 
 
 # Graphics window
@@ -42,31 +43,34 @@ imageFrame = tk.Frame(window, width=900, height=900)
 imageFrame.grid(row=0, column=0, padx=10, pady=2)
 imageFrame.pack()
 button_text = tk.StringVar()
-button = tk.Button(window, text=tk.StringVar(), width=25, command=lambda: update(confR,button))
+button = tk.Button(window, text=tk.StringVar(), width=25, command=lambda: update(confR, button))
 button.pack(side=tk.LEFT)
 
 button_text1 = tk.StringVar()
-button1 = tk.Button(window, text=tk.StringVar(), width=25, command=lambda: update1(confR,button1))
+button1 = tk.Button(window, text=tk.StringVar(), width=25, command=lambda: update1(confR, button1))
 button1.pack(side=tk.RIGHT)
 
 v = tk.StringVar(window)
-e = tk.Entry(window, textvariable=v,width=25)
+e = tk.Entry(window, textvariable=v, width=25)
 e.pack()
 
-def update2(conf):
+
+def update2(conf,bool):
     print("Entry point clicked")
     conf = v.get().upper()
     if conf in LABELS:
-        global confR
-        confR=conf
+        global confR, prob, pressed
+        confR = conf
+        prob = "99%"
+        pressed = bool
         print(confR)
-    else :
+
+    else:
         v.set("Enter a valid configuration")
 
-button2 = tk.Button(window,text='Submit',width=25, command=lambda: update2(confR))
+
+button2 = tk.Button(window, text='Submit', width=25, command=lambda: update2(confR,True))
 button2.pack()
-
-
 
 # Capture video frames
 lmain = tk.Label(imageFrame)
@@ -79,9 +83,8 @@ ap.add_argument("-o", "--output", required=True, help="path to our output video"
 ap.add_argument("-s", "--size", type=int, default=128, help="size of queue for averaging")
 args = vars(ap.parse_args())
 
-
 A = [[0] for i in range(len(LABELS))]
-print(A);
+print(A)
 print("[INFO] loading model and label binarizer...")
 model = load_model(args["model"], compile=False)
 lb = pickle.loads(open(args["label_bin"], "rb").read())
@@ -89,58 +92,62 @@ mean = np.array([123.68, 116.779, 103.939][::1], dtype="float32")
 Q = deque(maxlen=args["size"])
 
 vs = cv2.VideoCapture(args["input"])
-fps=vs.get(cv2.CAP_PROP_FPS)
-count=0
+fps = vs.get(cv2.CAP_PROP_FPS)
+count = 0
 
-def convert_frame_to_time(count,fps):
-    time=count/fps
-    if time/60 < 1:
+
+def convert_frame_to_time(count, fps):
+    time = count / fps
+    if time / 60 < 1:
         return "00:00:{:.2f}".format(time)
-    elif time/60 >= 1 and time/60 < 60:
-        minutes=int(time//60)
-        secondes=time/60-(time//60)
-        return "00:{}:{:.2f}".format(minutes,secondes)
+    elif time / 60 >= 1 and time / 60 < 60:
+        minutes = int(time // 60)
+        secondes = time / 60 - (time // 60)
+        return "00:{}:{:.2f}".format(minutes, secondes)
     else:
-        heures=int(time//3600)
-        minutes=int((time/3600-time//3600)*60)
-        secondes=((time/3600-time//3600)*60-minutes)*60
-        return "{}:{}:{:.2f}".format(heures,minutes,secondes)
+        heures = int(time // 3600)
+        minutes = int((time / 3600 - time // 3600) * 60)
+        secondes = ((time / 3600 - time // 3600) * 60 - minutes) * 60
+        return "{}:{}:{:.2f}".format(heures, minutes, secondes)
 
 
-prev_config=""
+prev_config = ""
 
-jsondict={-1: {"start": "null", "end": "null", "label": "null"},-2: {"start": "null0", "end": "null0", "label": "null0"}}
-startjson=""
-endjson=""
-configjson=""
-framejson=0
-togglestart=True
-toggleend=False
-def toggle_start(start0,config0,frame0):
-    global start,configjson,framejson,togglestart,toggleend,startjson
-    startjson= start0
-    configjson=config0
-    framejson=frame0
-    togglestart=False
-    toggleend=True
+jsondict = {-1: {"start": "null", "end": "null", "label": "null", "prob": "null"},
+            -2: {"start": "null0", "end": "null0", "label": "null0", "prob": "null0"}}
+startjson = ""
+endjson = ""
+configjson = ""
+framejson = 0
+togglestart = True
+toggleend = False
+
+
+def toggle_start(start0, config0, frame0, prob0):
+    global start, configjson, framejson, togglestart, toggleend, startjson, prob
+    startjson = start0
+    configjson = config0
+    framejson = frame0
+    prob = prob0
+    togglestart = False
+    toggleend = True
+
 
 def toggle_end(end0):
-    global endjson,json,togglestart,toggleend
-    endjson= end0
+    global endjson, json, togglestart, toggleend
+    endjson = end0
     jsondict[framejson] = {
-        "start": startjson, "end": endjson, "label": configjson
+        "start": startjson, "end": endjson, "label": configjson, "prob": prob
     }
-    toggleend=False
-    togglestart=True
-
+    toggleend = False
+    togglestart = True
 
 
 def show_frame():
-
     writer = None
     (W, H) = (None, None)
     _, frame = vs.read()
-    if  _ :
+    if _:
         global count
         count += 1
         print("time stamp current frame: {}".format(convert_frame_to_time(count, fps)))
@@ -163,6 +170,9 @@ def show_frame():
         j = np.argmax(results_j)
         label_j = lb.classes_[j]
         label = lb.classes_[i]
+        global prob, pressed
+        print("'''''''''''''''''{}''''''''''''''''''".format(pressed))
+
         global confR
         global prev_config
         if prev_config == "":
@@ -198,7 +208,8 @@ def show_frame():
             print(toggleend)
             if togglestart == True and toggleend == False:
                 togglestart = False
-                toggle_start(convert_frame_to_time(count, fps), confR, count)
+                toggle_start(convert_frame_to_time(count, fps), confR, count,
+                             "99%" if pressed is True else "{:.2f}%".format(round(results[i], 2) * 100))
                 print(jsondict)
             elif toggleend == True and togglestart == False:
                 toggle_end(convert_frame_to_time(count, fps))
@@ -229,11 +240,7 @@ def show_frame():
         lmain.imgtk = imgtk
         lmain.configure(image=imgtk)
         lmain.after(10, show_frame)
-
-
-
-
-
+        pressed=False
 
 
 show_frame()  # Display 2
@@ -269,5 +276,5 @@ plt.ylabel("prob")
 plt.legend(loc="lower left")
 plt.savefig("plot" + str(j) + ".png")
 
-#writer.release()
+# writer.release()
 vs.release()
