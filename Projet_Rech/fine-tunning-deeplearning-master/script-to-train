@@ -6,6 +6,6 @@ python Reload_Train.py --ReloadModel best_model.pickle --dataset C:/Users/youne/
 
 
 ##to launch
-python predict.py --model output/activity.model --label-bin output/lb.pickle --input C:/Users/youne/Desktop/example_clips/p207lise.mp4 --output output/results.mp4 --size 128
+python predict.py --model output/activity.model --label-bin output/lb.pickle --input C:/Users/youne/Desktop/example_clips/p207lise.mp4 --output output/results.mp4 --size 128 --proba 10.00
 python test_tk.py --model output/activity.model --label-bin output/lb.pickle --input C:/Users/youne/Desktop/example_clips/p207lise.mp4 --output output/results.mp4 --size 128
 

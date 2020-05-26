@@ -120,5 +120,5 @@ python3 predict.py --help
 ```
 Pour le chemin de la video pour le moment c'est en local et on doit specificier le chemin comme dans l'exemple ci-dessous:
 ```
-python predict.py --model output/activity.model --label-bin output/lb.pickle --input example_clips/p207lise.mp4 --output output/results.mp4 --size 128
+python predict.py --model output/activity.model --label-bin output/lb.pickle --input example_clips/p207lise.mp4 --output output/results.mp4 --size 128 --proba 10.00
 ```
