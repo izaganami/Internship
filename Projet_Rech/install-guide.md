@@ -1,0 +1,124 @@
+
+
+### Git and python Install
+
+https://github.com/izaganami/Internship
+```
+$ sudo apt-get install git
+```
+Si python est deja installé il faut verifiier que c'est la version 3.6 : 
+```
+python3 --version
+```
+Sinon:
+```
+ $ sudo apt-get install python3.6
+```
+```
+ $ sudo apt-get install python3-pip
+```
+```
+mkdir -p /local/data/line/CubicScout
+```
+```
+cd /local/data/line/CubicScout
+```
+```
+git clone https://github.com/izaganami/Internship.git
+```
+```
+mv Internship CubicScout
+```
+### Cuda and Cudnn install
+La commande ci-dessous va renvoyer la version à utiliser dans la comande : nvidia-driver-version
+```
+$ sudo apt-get purge nvidia*
+```
+
+```
+$ sudo add-apt-repository ppa:graphics-drivers
+$ sudo apt-get update
+$ sudo apt-get install nvidia-utils-430
+```
+```
+sudo apt-get install nvidia-driver-418
+```
+
+Pour cuda:
+```
+sudo wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-repo-ubuntu1804_10.0.130-1_amd64.deb
+sudo dpkg -i cuda-repo-ubuntu1804_10.0.130-1_amd64.deb
+sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub
+sudo apt-get update
+```
+
+```
+sudo apt-get install cuda-10-0
+```
+
+Pour  la partie Cudnn:
+```
+sudo wget http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/nvidia-machine-learning-repo-ubuntu1804_1.0.0-1_amd64.deb
+sudo apt install ./nvidia-machine-learning-repo-ubuntu1804_1.0.0-1_amd64.deb
+sudo apt-get update
+```
+
+```
+sudo apt-get install libcudnn7
+sudo apt-get install libcudnn7-dev
+```
+J'ai testé jusqu'à ici sur Ubuntu par la plateforme en ligne:
+ [codeanywhere](https://codeanywhere.com/editor/#)
+ 
+#### Tensofrflow 1.9.0:
+
+```
+$ pip install tensorflow-gpu==1.9.0 
+```
+
+
+
+#### fine-tunning-deeplearning
+```
+dnf install python3-virtualenv.noarch
+
+dnf install python3-opencv.x86_64
+
+pip3 install keras
+
+pip3 install imutils
+
+pip3 install sklearn
+
+pip3 install scikit-video
+
+apt-get install python-tk
+
+```
+#### data_preparation
+```
+dnf install ffmpeg opencv.x86_64
+
+dnf install python3-matplotlib.x86_64
+
+pip3 install moviepy
+
+pip3 install matplotlib
+
+dnf install python3-pytest-shutil.noarch
+```
+#### subtitles utility
+```
+dnf install aegisub.x86_64
+```
+### Some tests
+```
+cd /local/data/line/CubicScout/Projet_Rech/fine-tunning-deeplearning
+```
+```
+python3 predict.py --help
+```
+Pour le chemin de la video pour le moment c'est en local et on doit specificier le chemin comme dans l'exemple ci-dessous:
+```
+python predict.py --model output/activity.model --label-bin output/lb.pickle --input example_clips/p207lise.mp4 --output output/results.mp4 --size 128
+```
