@@ -67,7 +67,6 @@ sudo apt-get update
 sudo apt-get install libcudnn7
 sudo apt-get install libcudnn7-dev
 ```
-J'ai testé jusqu'à ici sur Ubuntu par la plateforme en ligne:
  [codeanywhere](https://codeanywhere.com/editor/#)
  
 #### Tensofrflow 1.9.0:
@@ -76,13 +75,18 @@ J'ai testé jusqu'à ici sur Ubuntu par la plateforme en ligne:
 $ pip install tensorflow-gpu==1.9.0 
 ```
 
-
+Si cela ne marche pas on installe: 
+```
+$ pip install tensorflow-gpu
+```
 
 #### fine-tunning-deeplearning
 ```
-dnf install python3-virtualenv.noarch
+sudo pip3 install virtualenv 
 
-dnf install python3-opencv.x86_64
+sudo apt update
+
+sudo apt-get install python-opencv
 
 pip3 install keras
 
@@ -97,19 +101,19 @@ apt-get install python-tk
 ```
 #### data_preparation
 ```
-dnf install ffmpeg opencv.x86_64
+sudo apt install ffmpeg
 
-dnf install python3-matplotlib.x86_64
+sudo apt-get install python3-matplotlib
 
 pip3 install moviepy
 
 pip3 install matplotlib
 
-dnf install python3-pytest-shutil.noarch
+pip install pytest-shutil
 ```
 #### subtitles utility
 ```
-dnf install aegisub.x86_64
+sudo apt-get install aegisub
 ```
 ### Some tests
 ```
