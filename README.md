@@ -35,3 +35,5 @@
 
 ---v05:
 Validation faite.
+!! VOIR README DU MODULE STAGE
+
