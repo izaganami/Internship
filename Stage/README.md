@@ -7,8 +7,8 @@ Pour le moment on a l'application qui est connectée à un service sur cloud (Mo
  Ci-dessous il'y a l'output du code, l'outil Postman qui permet de tester des service REST, le coté cloud et local(Compass) de 
  MongoDB.
  
-![Lien en methode GET](https://github.com/izaganami/Internship/Stage/screens/link.PNG"Capture")
+![Lien en methode GET](https://github.com/izaganami/Internship/blob/master/Stage/screens/link.PNG")
 
-![MongoDB et Compass](https://github.com/izaganami/Internship/Stage/screens/localandclound.PNG "Capture")
+![MongoDB et Compass](https://github.com/izaganami/Internship/blob/master/Stage/screens/localandclound.PNG "Capture")
 
-![Postman et la sortie du code](https://github.com/izaganami/Internship/Stage/screens/restfulapp.PNG "Capture")
+![Postman et la sortie du code](https://github.com/izaganami/Internship/blob/master/Stage/screens/restfulapp.PNG "Capture")
