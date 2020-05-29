@@ -7,8 +7,19 @@ var express = require('express'),
   
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
-mongoose.connect( 'mongodb+srv://admin:admin@cluster0-6maah.mongodb.net:27017/restapi.coll', {useNewUrlParser: true, useUnifiedTopology: true}, () =>
+mongoose.connect( encodeURI('mongodb+srv://admin:admin@cluster0-6maah.mongodb.net/restapi'),
+    {useNewUrlParser: true, useUnifiedTopology: true}, () =>
 console.log("connected"));
+
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+
+db.once('open', function (ref) {
+    console.log('Connected to mongo server.');
+    //trying to get collection names
+    console.log(db.collections);
+});
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -23,6 +34,10 @@ app.listen(port);
 
 
 console.log('started on: ' + port);
+
+Video.find(function(err, docs) {
+    console.log(JSON.stringify(docs));
+});
 
 app.use(function(req, res,next) {
   res.header("Access-Control-Allow-Origin","*");
@@ -44,3 +59,5 @@ client.connect(err => {
   client.close();
 });
  */
+
+

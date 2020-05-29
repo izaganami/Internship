@@ -10,4 +10,4 @@ var ModelSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('Videos', ModelSchema);
+module.exports = mongoose.model('Videos', ModelSchema,'videos');

@@ -33,5 +33,5 @@
 1. l'input est testé s'il appartient au groupe des labels ou pas.
 2. Pour chaque lancement de test sur un nouvelle video on genere des figures pour toutes 100frames pour visualiser les probabilités de chaque configuration.
 
- Prochaine etape:
-      Une deuxieme validation avant l'écriture sur le fichier json qui se base sur un seuil de probabilités à faire entrer manuellement ou avec une valeur par défaut.
+---v05:
+Validation faite.
