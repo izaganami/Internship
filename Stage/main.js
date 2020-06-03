@@ -4,7 +4,9 @@ var express = require('express'),
   mongoose = require('mongoose'),
   Video = require('./models/model'), //created model loading here
   bodyParser = require('body-parser');
-  
+
+
+
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
 mongoose.connect( encodeURI('mongodb+srv://admin:admin@cluster0-6maah.mongodb.net/restapi'),
@@ -36,7 +38,12 @@ app.listen(port);
 console.log('started on: ' + port);
 
 Video.find(function(err, docs) {
-    console.log(JSON.stringify(docs));
+    for(var i in docs)
+    {
+        console.log(docs[i]['_doc']['url'])
+    }
+
+
 });
 
 app.use(function(req, res,next) {
