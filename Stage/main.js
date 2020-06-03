@@ -5,6 +5,9 @@ var express = require('express'),
   Video = require('./models/model'), //created model loading here
   bodyParser = require('body-parser');
 
+const { exec } = require("child_process");
+const path = require('path');
+var process = require('process');
 
 
 // mongoose instance connection url connection
@@ -37,10 +40,29 @@ app.listen(port);
 
 console.log('started on: ' + port);
 
+
 Video.find(function(err, docs) {
+
     for(var i in docs)
     {
-        console.log(docs[i]['_doc']['url'])
+
+        var serverPath = path.resolve(process.cwd() + '/../Projet_Rech/fine-tunning-deeplearning-master');
+        console.log(serverPath)
+
+        var url=docs[i]['_doc']['url'];
+        exec("python "+serverPath+"/predict.py "+"--model "+serverPath+"/output/activity.model --label-bin "+serverPath+"/output/lb.pickle --input "+url+" --output "+serverPath+"/output/results.mp4 --size 128 --proba 10.00", (error, stdout, stderr) =>
+        {
+            if (error) {
+            console.log(`error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+});
+        break;
     }
 
 
@@ -65,6 +87,7 @@ client.connect(err => {
   // perform actions on the collection object
   client.close();
 });
+&& cd Projet_Rech\fine-tunning-deeolearning-master && python predict.py
  */
 
 
