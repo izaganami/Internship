@@ -7,6 +7,8 @@ var express = require('express'),
 
 const { exec } = require("child_process");
 const path = require('path');
+const router = require('express').Router();
+const url = require('url');
 var process = require('process');
 
 
@@ -40,16 +42,12 @@ app.listen(port);
 
 console.log('started on: ' + port);
 
+function f(url){
 
-Video.find(function(err, docs) {
-
-    for(var i in docs)
-    {
 
         var serverPath = path.resolve(process.cwd() + '/../Projet_Rech/fine-tunning-deeplearning-master');
         console.log(serverPath)
 
-        var url=docs[i]['_doc']['url'];
         exec("python "+serverPath+"/predict.py "+"--model "+serverPath+"/output/activity.model --label-bin "+serverPath+"/output/lb.pickle --input "+url+" --output "+serverPath+"/output/results.mp4 --size 128 --proba 10.00", (error, stdout, stderr) =>
         {
             if (error) {
@@ -62,22 +60,46 @@ Video.find(function(err, docs) {
         }
         console.log(`stdout: ${stdout}`);
 });
-        break;
-    }
+}
 
 
-});
+
 
 app.use(function(req, res,next) {
-  res.header("Access-Control-Allow-Origin","*");
+  //res.header("Access-Control-Allow-Origin","*");
   res.header("Access-Control-Allow-Headers","Origin,X-Requested-With,Content-Type,Accept,Authorization");
   if(req.method==="OPTIONS"){
     res.header("Access-Control-Allow-Methods","PUT,POST,PATCH,DELETE,GET");
     return res.status(200).json({})
   }
   next();
-  res.status(404).send({url: req.originalUrl + ' not found'})
+  //res.status(404).send({url: req.originalUrl + ' not found'})
 });
+
+
+app.get('*', function(req, res){
+    var current_url = new URL(req.protocol + '://' + "localhost:8989/" + req.originalUrl);
+    const search_params = current_url.searchParams;
+    const path_video = search_params.get('url');
+    f(path_video);
+    return res.send('Received a GET HTTP method with path='+path_video);
+});
+
+app.post('*', (req, res) => {
+  return res.send('Received a POST HTTP method');
+});
+
+app.put('/', (req, res) => {
+  return res.send('Received a PUT HTTP method');
+});
+
+app.delete('/', (req, res) => {
+  return res.send('Received a DELETE HTTP method');
+});
+
+app.listen(process.env.PORT, () =>
+  console.log(`listening on port ${port}!`),
+);
 /*
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://database:M!YnbRNbuUU3a4J@cluster0-mboti.mongodb.net/test?retryWrites=true&w=majority";

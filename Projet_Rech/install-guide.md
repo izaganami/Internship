@@ -86,7 +86,7 @@ sudo pip3 install virtualenv
 
 sudo apt update
 
-sudo apt-get install python-opencv
+sudo apt-get install opencv-python
 
 pip3 install keras
 
