@@ -10,6 +10,9 @@ const path = require('path');
 const router = require('express').Router();
 const url = require('url');
 var process = require('process');
+const fs = require('fs');
+
+
 
 
 // mongoose instance connection url connection
@@ -45,7 +48,7 @@ console.log('started on: ' + port);
 function f(url){
 
 
-        var serverPath = path.resolve(process.cwd() + '/../Projet_Rech/fine-tunning-deeplearning-master');
+        var serverPath = path.resolve(process.cwd() + '/../AI/fine-tunning-deeplearning-master');
         console.log(serverPath)
 
         exec("python "+serverPath+"/predict.py "+"--model "+serverPath+"/output/activity.model --label-bin "+serverPath+"/output/lb.pickle --input "+url+" --output "+serverPath+"/output/results.mp4 --size 128 --proba 10.00", (error, stdout, stderr) =>
@@ -78,11 +81,39 @@ app.use(function(req, res,next) {
 
 
 app.get('*', function(req, res){
-    var current_url = new URL(req.protocol + '://' + "localhost:8989/" + req.originalUrl);
+    var current_url = new URL(req.protocol + '://' + "localhost:8989/" + req.originalUrl+".mp4");
     const search_params = current_url.searchParams;
     const path_video = search_params.get('url');
-    f(path_video);
-    return res.send('Received a GET HTTP method with path='+path_video);
+    try
+        {
+            //if (fs.existsSync(path_video))
+            //{
+                var not_private = path_video.includes("/");
+                if(not_private)
+                {
+                    f(path_video);
+                    return res.send('Received a GET HTTP method with public path='+path_video);
+                }
+                else
+                    {
+                        var path_priv_video="file:///workspace/private/videos/"+path_video;
+                        return res.send('Received a GET HTTP method with private path='+path_priv_video);
+                    }
+
+            //}
+           // else
+                //{
+                   // return res.send('Received a GET HTTP method with a wrong path');
+              //  }
+
+        }
+    catch(err)
+        {
+            console.log(err);
+            return res.send('Received a GET HTTP method with an error: '+err);
+        }
+
+
 });
 
 app.post('*', (req, res) => {
@@ -100,6 +131,7 @@ app.delete('/', (req, res) => {
 app.listen(process.env.PORT, () =>
   console.log(`listening on port ${port}!`),
 );
+
 /*
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://database:M!YnbRNbuUU3a4J@cluster0-mboti.mongodb.net/test?retryWrites=true&w=majority";
@@ -109,7 +141,7 @@ client.connect(err => {
   // perform actions on the collection object
   client.close();
 });
-&& cd Projet_Rech\fine-tunning-deeolearning-master && python predict.py
+&& cd AI\fine-tunning-deeolearning-master && python predict.py
  */
 
 
