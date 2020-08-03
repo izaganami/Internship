@@ -50,8 +50,11 @@ function f(url){
 
         var serverPath = path.resolve(process.cwd() + '/../AI/fine-tunning-deeplearning-master');
         console.log(serverPath)
-
-        exec("python "+serverPath+"/predict.py "+"--model "+serverPath+"/output/activity.model --label-bin "+serverPath+"/output/lb.pickle --input "+url+" --output "+serverPath+"/output/results.mp4 --size 128 --proba 10.00", (error, stdout, stderr) =>
+        let re = new RegExp("^.*\\/(?=[^/]*$)");
+        var sub_str=url.match(re);
+        var name = url.replace(sub_str,'');
+        name= name.replace(".mp4",'')
+        exec("python "+serverPath+"/predict.py "+"--model "+serverPath+"/output/activity.model --label-bin "+serverPath+"/output/lb.pickle --input "+url+" --output "+serverPath+"/output/results.mp4 --size 128 --proba 10.00 --path "+serverPath+"/output/"+name+".json", (error, stdout, stderr) =>
         {
             if (error) {
             console.log(`error: ${error.message}`);
@@ -86,8 +89,8 @@ app.get('*', function(req, res){
     const path_video = search_params.get('url');
     try
         {
-            //if (fs.existsSync(path_video))
-            //{
+            if (fs.existsSync(path_video))
+            {
                 var not_private = path_video.includes("/");
                 if(not_private)
                 {
@@ -100,11 +103,11 @@ app.get('*', function(req, res){
                         return res.send('Received a GET HTTP method with private path='+path_priv_video);
                     }
 
-            //}
-           // else
-                //{
-                   // return res.send('Received a GET HTTP method with a wrong path');
-              //  }
+            }
+            else
+                {
+                   return res.send('Received a GET HTTP method with a wrong path');
+                }
 
         }
     catch(err)

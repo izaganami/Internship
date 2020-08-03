@@ -35,5 +35,14 @@
 
 ---v05:
 Validation faite.
-!! VOIR README DU MODULE STAGE
+!! VOIR README DU MODULE WebService
+
+---v06:
+1.Le lancement du script peut se faire sur des vidéos locales ou sur le cloud.
+2.En sortie on récupère le fichier json avec le meme nom de la vidéo.
+
+---v07:
+1.Prise en compte des vidéos protégées.
+
+
 

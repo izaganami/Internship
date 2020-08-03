@@ -12,3 +12,25 @@ Pour le moment on a l'application qui est connectée à un service sur cloud (Mo
 ![MongoDB et Compass](https://github.com/izaganami/Internship/blob/master/Stage/screens/localandcloud.PNG  "MongoDB et Compass")
 
 ![Postman et la sortie du code](https://github.com/izaganami/Internship/blob/master/Stage/screens/restfulapp.PNG  "Postman et la sortie du code")
+
+---
+To test the application, first thing first is running the server on the virtual machine using:
+```
+npm start
+```
+After receiving the "connected" message, we can open any browser and run these examples:
+1.For a public video located in the virtual machine:
+```
+http://localhost:8989/page?url=C:/Users/youne/Desktop/example_clips/p207lise
+```
+
+
+2.For a private video located in the virtual machine:(Only the name is required and the algortihm will verify if it exists or not)
+```
+http://localhost:8989/page?url=p207lise
+```
+The complete path for this last request will be : 
+```
+file:///workspace/private/videos/p207lise
+```
+And the algorithm makes sure the extension is added afterwards.

@@ -82,7 +82,7 @@ ap.add_argument("-i", "--input", required=True, help="path to our input video")
 ap.add_argument("-o", "--output", required=True, help="path to our output video")
 ap.add_argument("-s", "--size", type=int, default=128, help="size of queue for averaging")
 ap.add_argument("-p", "--proba", type=float, default=20.00, help="probabilty to write or not a configuration in the json file")
-ap.add_argument("-c", "--path", type=str, default="result.json", help="path to output json")
+ap.add_argument("-c", "--path", type=str, help="path to output json")
 
 args = vars(ap.parse_args())
 
