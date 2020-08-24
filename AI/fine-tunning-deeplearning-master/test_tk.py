@@ -1,3 +1,5 @@
+## This file is only used to test and is not part of the running process
+
 import numpy as np
 import cv2
 import tkinter as tk
