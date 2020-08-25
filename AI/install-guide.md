@@ -126,3 +126,27 @@ Pour le chemin de la video pour le moment c'est en local et on doit specificier 
 ```
 python predict.py --model output/activity.model --label-bin output/lb.pickle --input example_clips/p207lise.mp4 --output output/results.mp4 --size 128 --proba 10.00
 ```
+
+###launch node server
+```
+npm start
+```
+
+
+###launch ngrok server (free trial version with random URL)
+Authentication:
+```
+ngrok authtoken 1gYNGCw1ZRgzRTMckejZJ68fbOe_3dFZJfLuA8tTseLCmjYWK
+```
+Launching:
+```
+ngrok 8989
+```
+Browse the "http://1a36156244a8.ngrok.io" URL with the path to the video:
+```
+https://394724320e20.ngrok.io/page?url=C:/Users/youne/Desktop/example_clips/p207lise
+```
+
+
+
+
