@@ -147,6 +147,10 @@ Browse the "http://1a36156244a8.ngrok.io" URL with the path to the video:
 https://394724320e20.ngrok.io/page?url=C:/Users/youne/Desktop/example_clips/p207lise
 ```
 
+To launch from a local server and a local file ex:
+```
+localhost:8989/page?url=C:/Users/youne/Desktop/example_clips/p207lise
+```
 
 
 
