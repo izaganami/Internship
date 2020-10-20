@@ -16,6 +16,7 @@ var limiter = new RateLimit({
 });
 
 // apply rate limiter to all requests
+// 5 req / min
 app.use(limiter);
 
 app.use(express.static(__dirname + '/'));
