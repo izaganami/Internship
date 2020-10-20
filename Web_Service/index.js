@@ -35,4 +35,4 @@ app.get('/local.html', function(req, res) {
         res.send(text);
     });
 });
-app.listen(PORT);
+app.listen(process.env.PORT || PORT);
