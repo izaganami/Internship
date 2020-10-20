@@ -8,6 +8,15 @@ p=__dirname
 console.log(p)
 var server = http.createServer(app);
 
+// set up rate limiter: maximum of five requests per minute
+var RateLimit = require('express-rate-limit');
+var limiter = new RateLimit({
+  windowMs: 1*60*1000, // 1 minute
+  max: 5
+});
+
+// apply rate limiter to all requests
+app.use(limiter);
 
 app.use(express.static(__dirname + '/'));
 app.get('/cloud.html', function(req, res) {
