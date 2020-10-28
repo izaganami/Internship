@@ -33,14 +33,22 @@ input[type=submit]:hover {
   padding: 20px;
 }
 </style>
-<form id="form1" action="" method="GET">
-    <input type="text" id="url" name="url" placeholder="Enter the URL of your video">
-    <button type="submit" id="submit">Submit</button>
-</form>
+    <input type="text" id="url" placeholder="Enter the URL of your video">
+    <button type="submit" id="submit" onclick="go()">Submit</button>
+
 
 <script>
-    var frm = document.getElementById('form1') || null;
-    if(frm) {
+    /**var frm = document.getElementById('form1') || null;
+        if(frm)
+        {
             frm.action = document.URL+'page?'
-        }
+        }**/
+    function go()
+    {
+
+        var value = document.getElementById('url').value
+        window.location="http://localhost:8989/page?url=" + value
+
+    }
+
 </script>
