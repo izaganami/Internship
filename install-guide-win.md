@@ -100,7 +100,10 @@ Launch the web-service on the Internship root:
 ```
 npm start
 ```
-
+After running npm, go to:
+```
+https://creacube.herokuapp.com/
+```
 
 To launch from a local server and a local file ex:
 ```
