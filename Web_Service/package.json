@@ -23,7 +23,7 @@
     "moment-timezone": "^0.5.13",
     "mongoose": "latest",
     "mustache": "^4.0.1",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "node-uuid": "^1.4.8",
     "swagger-ui-express": "^2.0.13",
     "sync-request": "^4.0.2",
